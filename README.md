@@ -18,13 +18,14 @@ It distributes one plugin — `deep-core-skills` — so your skills are availabl
 │           ├── LABELS.md          # shared: canonical triage labels
 │           ├── ARCHITECTURE-LANGUAGE.md / ARCHITECTURE-DEEPENING.md  # shared: architecture lens
 │           ├── SECURITY-LENS.md   # shared: security lens
+│           ├── HTML-REPORT.md     # shared: report-craft for the interactive review skills
 │           └── <skill-name>/
 │               └── SKILL.md
 └── routines/                      # version-controlled routine wrappers (copied into
     └── routine-<name>.md          #   the scheduled-agent config; NOT part of the plugin)
 ```
 
-Shared `*.md` files at the `skills/` root (`LABELS.md`, the architecture lens, `SECURITY-LENS.md`) are single-sourced reference docs that multiple skills link to. `routines/` sits **outside** the plugin: routines are thin orchestrators copied verbatim into Jeff's scheduled-agent config — see [routines/README.md](./routines/README.md).
+Shared `*.md` files at the `skills/` root (`LABELS.md`, the two lenses, `HTML-REPORT.md`) are single-sourced reference docs that multiple skills link to. `routines/` sits **outside** the plugin: routines are thin orchestrators copied verbatim into Jeff's scheduled-agent config — see [routines/README.md](./routines/README.md).
 
 ## Use it
 
@@ -63,7 +64,7 @@ Skills currently in the plugin. (Adapted from [mattpocock/skills](https://github
 
 ### Conventions
 
-The three issue-tracker skills — `to-issues`, `to-prd`, and `triage` — assume **[Linear](https://linear.app)** (team `Engineering`) as the tracker, driven through the Linear MCP server rather than a CLI. They share one canonical label vocabulary defined in [`plugins/deep-core-skills/skills/LABELS.md`](./plugins/deep-core-skills/skills/LABELS.md) — each skill links that file and applies its labels verbatim, so the labels and their meanings are written once. The two architecture skills (`improve-codebase-architecture`, `review-architecture`) likewise share one **architecture lens** — [`ARCHITECTURE-LANGUAGE.md`](./plugins/deep-core-skills/skills/ARCHITECTURE-LANGUAGE.md) (vocabulary + principles) and [`ARCHITECTURE-DEEPENING.md`](./plugins/deep-core-skills/skills/ARCHITECTURE-DEEPENING.md) (how to deepen across a seam); the two security skills (`improve-codebase-security`, `review-security`) share one **security lens** — [`SECURITY-LENS.md`](./plugins/deep-core-skills/skills/SECURITY-LENS.md) (defensive stance + Saltzer & Schroeder / STRIDE / OWASP). In each pair the interactive and autonomous passes read the same lens, so they never drift. All cross-references between skills are plain relative markdown links. The doc-oriented skills (`grill-with-docs`, `improve-codebase-architecture`, `tdd`) read a root `CONTEXT.md` and `docs/adr/` when present and create them lazily otherwise.
+The three issue-tracker skills — `to-issues`, `to-prd`, and `triage` — assume **[Linear](https://linear.app)** (team `Engineering`) as the tracker, driven through the Linear MCP server rather than a CLI. They share one canonical label vocabulary defined in [`plugins/deep-core-skills/skills/LABELS.md`](./plugins/deep-core-skills/skills/LABELS.md) — each skill links that file and applies its labels verbatim, so the labels and their meanings are written once. The two architecture skills (`improve-codebase-architecture`, `review-architecture`) likewise share one **architecture lens** — [`ARCHITECTURE-LANGUAGE.md`](./plugins/deep-core-skills/skills/ARCHITECTURE-LANGUAGE.md) (vocabulary + principles) and [`ARCHITECTURE-DEEPENING.md`](./plugins/deep-core-skills/skills/ARCHITECTURE-DEEPENING.md) (how to deepen across a seam); the two security skills (`improve-codebase-security`, `review-security`) share one **security lens** — [`SECURITY-LENS.md`](./plugins/deep-core-skills/skills/SECURITY-LENS.md) (defensive stance + Saltzer & Schroeder / STRIDE / OWASP). In each pair the interactive and autonomous passes read the same lens, so they never drift. The two interactive skills (`improve-codebase-architecture`, `improve-codebase-security`) additionally share one **report-craft** doc — [`HTML-REPORT.md`](./plugins/deep-core-skills/skills/HTML-REPORT.md) (scaffold, card structure, diagram patterns, tone); each skill supplies only its own legend, badges, and vocabulary inline. (Architecture also carries an `INTERFACE-DESIGN.md` support file with no security analog — a deliberate asymmetry, since "design the interface twice" has no security equivalent.) All cross-references between skills are plain relative markdown links. The doc-oriented skills (`grill-with-docs`, `improve-codebase-architecture`, `tdd`) read a root `CONTEXT.md` and `docs/adr/` when present and create them lazily otherwise.
 
 ## Skills vs. routines
 

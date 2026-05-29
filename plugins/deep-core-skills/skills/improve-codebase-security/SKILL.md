@@ -37,25 +37,24 @@ Confirm each candidate is **systemic** (spans multiple sites/boundaries), not a 
 
 ### 2. Present candidates as an HTML report
 
-Write a self-contained HTML file to the OS temp directory so nothing lands in the repo. Resolve the temp dir from `$TMPDIR`, falling back to `/tmp` (or `%TEMP%` on Windows), and write to `<tmpdir>/security-hardening-<timestamp>.html` so each run gets a fresh file. Open it for the user — `xdg-open <path>` on Linux, `open <path>` on macOS, `start <path>` on Windows — and tell them the absolute path.
+Follow the shared report-craft in [HTML-REPORT.md](../HTML-REPORT.md) for the scaffold, the card structure, the diagram patterns, and the style/tone discipline. Each candidate gets a **before/after visualisation**. Be visual — but stay defensive: diagram the design gap, never an attack runbook. The security-specific report details that doc defers to the calling skill are below.
 
-The report uses **Tailwind via CDN** for layout and **Mermaid via CDN** for diagrams where a graph reliably communicates structure (trust-boundary diagrams, data-flow across a boundary, an authorization call graph). Each candidate gets a **before/after visualisation** showing the boundary as it is vs. as it would be with the chokepoint/default in place. Be visual, but stay defensive — diagram the design gap, never an attack runbook.
+**Title & temp file.** Title the report "Security review — {{repo name}}" and write to `<tmpdir>/security-hardening-<timestamp>.html`.
 
-For each candidate, render a card with:
+**Legend.** Map the visual elements: solid box = component, dashed line = trust boundary, red arrow = untrusted/unmediated flow, thick dark box = chokepoint / enforced boundary. Define the matching CSS in the scaffold's custom layer (`.boundary { stroke-dasharray: 4 4; }`, `.unmediated { stroke: #dc2626; }`, `.chokepoint { background: linear-gradient(135deg,#0f172a,#1e293b); }`).
 
-- **Trust boundary** — which boundary this concerns (from the lens checklist)
-- **Weakness** — the systemic design gap, framed defensively, with the principle/threat it violates (S&S / STRIDE / OWASP)
-- **Hardening** — plain-English description of the secure-by-default change (the chokepoint, the fail-safe default, the enforced boundary)
-- **Evidence** — 3–6 `file:line` references demonstrating the pattern
-- **Before / After diagram** — side-by-side, illustrating the boundary before and after the hardening
-- **Severity** — Critical / High / Medium / Low, rendered as a badge, justified per the lens
-- **Recommendation strength** — `Strong` / `Worth exploring` / `Speculative`, as a badge
+**Badges.** The shared recommendation-strength badge, plus a **severity** badge per candidate: Critical / High / Medium / Low, justified per the lens (Critical = red, High = orange, Medium = amber, Low = slate).
+
+**Card content.** Trust boundary (from the lens checklist) · Weakness (the systemic design gap, defensively framed, with the S&S / STRIDE / OWASP principle it violates) · Hardening (the secure-by-default change — the chokepoint, the fail-safe default, the enforced boundary) · Evidence (3–6 `file:line` refs) · the before/after diagram (the boundary as it is vs. with the chokepoint/default in place).
+
+**Controlled vocabulary.** Use CONTEXT.md vocabulary for the domain, and [SECURITY-LENS.md](../SECURITY-LENS.md) vocabulary for the security reasoning — talk about "the Order intake boundary," not "the FooBarHandler."
+- **Use exactly:** trust boundary, chokepoint, complete mediation, fail-safe default, least privilege, least common mechanism, separation of privilege — and the STRIDE/OWASP names from the lens.
+- **Never substitute:** "boundary" alone where you mean *trust* boundary · "check" where you mean a mediating *chokepoint* · vague "validation" where you mean a named control.
+- Wins read like *"complete mediation: one chokepoint, every access checked"*, *"fail-safe default: deny on misconfig"* — never *"more secure"* or *"hardened."*
+
+**ADR conflicts.** If a candidate contradicts an existing ADR (e.g. a documented decision to trust a given input), only surface it when the risk genuinely warrants revisiting the ADR. Mark it in an amber callout (_"contradicts ADR-0007 — but worth reopening because…"_).
 
 End the report with a **Top recommendation** section: which hardening you'd tackle first and why. If anything is **genuinely Critical, exploitable, and currently-live**, lead with it unmistakably (per the lens) — don't let it read like a routine card.
-
-**Use CONTEXT.md vocabulary for the domain, and [SECURITY-LENS.md](../SECURITY-LENS.md) vocabulary for the security reasoning.** Talk about "the Order intake boundary," not "the FooBarHandler."
-
-**ADR conflicts**: if a candidate contradicts an existing ADR (e.g. a documented decision to trust a given input), only surface it when the risk genuinely warrants revisiting the ADR. Mark it clearly in the card (a warning callout: _"contradicts ADR-0007 — but worth reopening because…"_).
 
 Do NOT propose the detailed remediation yet. After the file is written, ask the user: "Which of these would you like to explore?"
 
