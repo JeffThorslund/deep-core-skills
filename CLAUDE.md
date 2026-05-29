@@ -4,15 +4,19 @@ Guidance for working on **this repo** — Jeff's `deep-core-skills` Claude Code 
 
 ## What this repo is
 
-A plugin marketplace distributing one plugin (`deep-core-skills`). Skills live at `plugins/deep-core-skills/skills/<name>/SKILL.md`, one folder per skill (plus any supporting `.md` files the skill references via relative links). See `README.md` for install/usage.
+A plugin marketplace distributing one plugin (`deep-core-skills`). Skills live at `plugins/deep-core-skills/skills/<name>/SKILL.md`, one folder per skill (plus any supporting `.md` files the skill references via relative links). Shared reference docs (`LABELS.md`, the architecture lens, `SECURITY-LENS.md`) sit flat at the `skills/` root. A separate top-level `routines/` dir — **outside** the plugin — holds version-controlled routine wrappers that get copied verbatim into Jeff's scheduled-agent config. See `README.md` for install/usage and `routines/README.md` for the routine convention.
 
 ## Conventions for skills here
 
 - **Issue tracker is Linear.** The tracker skills (`to-issues`, `to-prd`, `triage`) target Linear (team `Engineering`) via the Linear MCP server — not `gh`/`glab`. Any new tracker-touching skill should follow the same pattern.
 - **Triage labels live in one file.** The canonical label vocabulary and meanings are defined once in `plugins/deep-core-skills/skills/LABELS.md`. The three tracker skills (`to-issues`, `to-prd`, `triage`) reference it with a relative markdown link — `[LABELS.md](../LABELS.md)` — and instruct the agent to read it and apply the strings verbatim. **Edit labels there, not in the skills.** Any new label-aware skill should link the same file instead of restating the list. The labels already exist in the `Engineering` team — never add label-creation logic.
 - **Cross-references are relative markdown links.** Skills reference each other and their shared docs with plain relative links (`[LABELS.md](../LABELS.md)`, `[ARCHITECTURE-LANGUAGE.md](../ARCHITECTURE-LANGUAGE.md)`), not `` !`cat …` `` runtime inlines or absolute paths. Keep every link relative and resolving. (We previously inlined `LABELS.md` via `` !`cat` `` with `allowed-tools: Bash(cat *)`; that was replaced with links — don't reintroduce the `cat` form.)
-- **The architecture lens is single-sourced.** The architecture vocabulary and how-to-deepen guidance live once at the skills root in `ARCHITECTURE-LANGUAGE.md` + `ARCHITECTURE-DEEPENING.md`. Both `improve-codebase-architecture` (interactive) and `review-architecture` (autonomous) link to them so the two never drift. Edit the lens there, not in either skill. (Note the deliberate asymmetry: `security-review` keeps its lenses — S&S/STRIDE/OWASP — inline because it has no interactive sibling reusing them; architecture shares because it does.)
-- **Analysis skills don't file tickets.** The "review archetype" — `security-review`, `review-architecture` — produces structured findings and stops. Filing, labelling, dedup, and escalation are *routine* concerns delegated to the tracker skills, keeping Linear logic single-sourced. Don't add Linear calls or label-creation to an analysis skill.
+- **Review lenses are single-sourced.** Each review domain has one shared lens at the skills root, linked by both its interactive and autonomous skill so the pair never drifts. Edit the lens there, not in either skill:
+  - **Architecture** — `ARCHITECTURE-LANGUAGE.md` (vocabulary + principles) + `ARCHITECTURE-DEEPENING.md` (how to deepen across a seam), shared by `improve-codebase-architecture` (interactive) and `review-architecture` (autonomous).
+  - **Security** — `SECURITY-LENS.md` (defensive stance + S&S/STRIDE/OWASP), shared by `improve-codebase-security` (interactive) and `review-security` (autonomous).
+  Any new review domain should follow the same shape: one shared lens, an interactive `improve-codebase-*` skill, an autonomous `review-*` skill.
+- **Analysis skills don't file tickets.** The "review archetype" — `health-check`, `review-architecture`, `review-security` — produces structured findings (or a report) and stops. Filing, labelling, dedup, and escalation are *routine* concerns delegated to the tracker skills, keeping Linear logic single-sourced. Don't add Linear calls or label-creation to an analysis skill.
+- **Routines wrap skills by invocation name.** Routine wrappers in `routines/` reference skills as `/deep-core-skills:<skill>` (never by file path — they're copied out of this repo) and carry the instance-specific config the skill omits (scope, cadence, dedup, escalation, the tracker-skill chain). Keep the meat in the skill; keep only orchestration in the routine.
 - **Domain docs are single-context.** Skills assume a root `CONTEXT.md` + `docs/adr/`, created lazily by `grill-with-docs`.
 
 ## Provenance
@@ -23,7 +27,8 @@ Most skills are adapted from [mattpocock/skills](https://github.com/mattpocock/s
 
 - `improve-codebase-architecture` no longer matches Matt's verbatim: its `LANGUAGE.md`/`DEEPENING.md` were lifted to the skills root as the shared architecture lens (`ARCHITECTURE-LANGUAGE.md` / `ARCHITECTURE-DEEPENING.md`) and the skill's inline glossary was collapsed to a link. The lens content is unchanged — only its location and the references moved.
 - `review-architecture` is **original** (no upstream counterpart) — the autonomous, analysis-only sibling of `improve-codebase-architecture`, sharing the same lens.
-- `health-check` and `security-review` are also original (no upstream counterpart).
+- `health-check` is original (no upstream counterpart).
+- `review-security` was the original `security-review` skill, renamed for parallelism with `review-architecture`; its lenses were lifted to the shared `SECURITY-LENS.md`. `improve-codebase-security` is **original** — the interactive sibling, mirroring `improve-codebase-architecture`'s flow. Both are original (no upstream counterpart).
 - `to-issues`, `to-prd`, `triage` diverge only by the Linear/LABELS adaptations above — no other behavioural drift.
 
 ## Editing

@@ -10,14 +10,21 @@ It distributes one plugin — `deep-core-skills` — so your skills are availabl
 .
 ├── .claude-plugin/
 │   └── marketplace.json          # the marketplace catalog (lists the plugin)
-└── plugins/
-    └── deep-core-skills/
-        ├── .claude-plugin/
-        │   └── plugin.json        # the plugin manifest
-        └── skills/                # your skills go here (one folder each)
-            └── <skill-name>/
-                └── SKILL.md
+├── plugins/
+│   └── deep-core-skills/
+│       ├── .claude-plugin/
+│       │   └── plugin.json        # the plugin manifest
+│       └── skills/                # the skills (one folder each)
+│           ├── LABELS.md          # shared: canonical triage labels
+│           ├── ARCHITECTURE-LANGUAGE.md / ARCHITECTURE-DEEPENING.md  # shared: architecture lens
+│           ├── SECURITY-LENS.md   # shared: security lens
+│           └── <skill-name>/
+│               └── SKILL.md
+└── routines/                      # version-controlled routine wrappers (copied into
+    └── routine-<name>.md          #   the scheduled-agent config; NOT part of the plugin)
 ```
+
+Shared `*.md` files at the `skills/` root (`LABELS.md`, the architecture lens, `SECURITY-LENS.md`) are single-sourced reference docs that multiple skills link to. `routines/` sits **outside** the plugin: routines are thin orchestrators copied verbatim into Jeff's scheduled-agent config — see [routines/README.md](./routines/README.md).
 
 ## Use it
 
@@ -46,7 +53,8 @@ Skills currently in the plugin. (Adapted from [mattpocock/skills](https://github
 - **[health-check](./plugins/deep-core-skills/skills/health-check/SKILL.md)** — Read-only sweep of connected monitoring/observability services: active incidents, new errors, performance anomalies, resolved items, ranked by severity. No Linear, no codebase.
 - **[improve-codebase-architecture](./plugins/deep-core-skills/skills/improve-codebase-architecture/SKILL.md)** — Interactive: find deepening opportunities in a codebase, present them as an HTML report, then grill the chosen one. Informed by the domain language in `CONTEXT.md` and the decisions in `docs/adr/`.
 - **[review-architecture](./plugins/deep-core-skills/skills/review-architecture/SKILL.md)** — Autonomous, analysis-only sibling of `improve-codebase-architecture`: scans for the single most significant systemic architectural weakness and emits one structured finding. Shares the same architecture lens; filing is delegated to the tracker skills.
-- **[security-review](./plugins/deep-core-skills/skills/security-review/SKILL.md)** — Scan for the single most significant systemic security weakness via Saltzer & Schroeder / STRIDE / OWASP. Produces severity-ranked findings; filing is delegated to the tracker skills.
+- **[improve-codebase-security](./plugins/deep-core-skills/skills/improve-codebase-security/SKILL.md)** — Interactive: find hardening opportunities (chokepoints, fail-safe defaults, enforced trust boundaries), present them as an HTML report, then grill the chosen one. Shares the security lens; informed by `CONTEXT.md` and `docs/adr/`.
+- **[review-security](./plugins/deep-core-skills/skills/review-security/SKILL.md)** — Autonomous, analysis-only sibling of `improve-codebase-security`: scans for the single most significant systemic security weakness via Saltzer & Schroeder / STRIDE / OWASP and emits one structured finding. Shares the same security lens; filing is delegated to the tracker skills.
 - **[tdd](./plugins/deep-core-skills/skills/tdd/SKILL.md)** — Test-driven development with a red-green-refactor loop. Builds features or fixes bugs one vertical slice at a time.
 - **[to-issues](./plugins/deep-core-skills/skills/to-issues/SKILL.md)** — Break any plan, spec, or PRD into independently-grabbable issues using vertical slices.
 - **[to-prd](./plugins/deep-core-skills/skills/to-prd/SKILL.md)** — Turn the current conversation context into a PRD and submit it to the issue tracker.
@@ -55,36 +63,41 @@ Skills currently in the plugin. (Adapted from [mattpocock/skills](https://github
 
 ### Conventions
 
-The three issue-tracker skills — `to-issues`, `to-prd`, and `triage` — assume **[Linear](https://linear.app)** (team `Engineering`) as the tracker, driven through the Linear MCP server rather than a CLI. They share one canonical label vocabulary defined in [`plugins/deep-core-skills/skills/LABELS.md`](./plugins/deep-core-skills/skills/LABELS.md) — each skill links that file and applies its labels verbatim, so the labels and their meanings are written once. The two architecture skills (`improve-codebase-architecture`, `review-architecture`) likewise share one **architecture lens** — [`ARCHITECTURE-LANGUAGE.md`](./plugins/deep-core-skills/skills/ARCHITECTURE-LANGUAGE.md) (vocabulary + principles) and [`ARCHITECTURE-DEEPENING.md`](./plugins/deep-core-skills/skills/ARCHITECTURE-DEEPENING.md) (how to deepen across a seam) — so the interactive and autonomous passes never drift. All cross-references between skills are plain relative markdown links. The doc-oriented skills (`grill-with-docs`, `improve-codebase-architecture`, `tdd`) read a root `CONTEXT.md` and `docs/adr/` when present and create them lazily otherwise.
+The three issue-tracker skills — `to-issues`, `to-prd`, and `triage` — assume **[Linear](https://linear.app)** (team `Engineering`) as the tracker, driven through the Linear MCP server rather than a CLI. They share one canonical label vocabulary defined in [`plugins/deep-core-skills/skills/LABELS.md`](./plugins/deep-core-skills/skills/LABELS.md) — each skill links that file and applies its labels verbatim, so the labels and their meanings are written once. The two architecture skills (`improve-codebase-architecture`, `review-architecture`) likewise share one **architecture lens** — [`ARCHITECTURE-LANGUAGE.md`](./plugins/deep-core-skills/skills/ARCHITECTURE-LANGUAGE.md) (vocabulary + principles) and [`ARCHITECTURE-DEEPENING.md`](./plugins/deep-core-skills/skills/ARCHITECTURE-DEEPENING.md) (how to deepen across a seam); the two security skills (`improve-codebase-security`, `review-security`) share one **security lens** — [`SECURITY-LENS.md`](./plugins/deep-core-skills/skills/SECURITY-LENS.md) (defensive stance + Saltzer & Schroeder / STRIDE / OWASP). In each pair the interactive and autonomous passes read the same lens, so they never drift. All cross-references between skills are plain relative markdown links. The doc-oriented skills (`grill-with-docs`, `improve-codebase-architecture`, `tdd`) read a root `CONTEXT.md` and `docs/adr/` when present and create them lazily otherwise.
 
 ## Skills vs. routines
 
-A **skill** here is a reusable building block (version-controlled, in this repo). A **routine** is a thin
-orchestrator that calls skills in a certain order on a schedule — it lives in your **non-version-controlled**
-scheduled-agent config, not in this plugin. The goal: routines stay light, and any reusable substance lives in
-a skill so it's written once.
+A **skill** (in `plugins/deep-core-skills/skills/`) is a reusable building block that carries the *meat* —
+how to do the work. A **routine** (in [`routines/`](./routines/)) is a thin orchestrator that invokes one or
+more skills in a set order and supplies the *instance-specific* config — scope, cadence, dedup, escalation, and
+which tracker skill the findings chain into. Routines are version-controlled here, then **copied verbatim** into
+the scheduled-agent config (which is not itself in this repo). The goal: routines stay light, and any reusable
+substance lives in a skill so it's written once.
 
 Two consequences of that split, both load-bearing:
 
-- **Analysis skills don't file tickets.** The *review archetype* — `health-check`, `security-review`, and
+- **Analysis skills don't file tickets.** The *review archetype* — `health-check`, `review-security`, and
   `review-architecture` — *produces findings* and stops there. Turning findings into Linear issues is delegated to
   `to-issues` / `to-prd` / `triage`, which own the tracker conventions and the `LABELS.md` vocabulary. This keeps
-  Linear logic single-sourced — an analysis skill never re-implements `create_issue` or label rules. A routine
-  wires them together (e.g. `review-architecture` → `to-issues`, or `security-review` → `to-prd`).
+  Linear logic single-sourced — an analysis skill never re-implements `create_issue` or label rules. The routine
+  wires them together (e.g. `review-architecture` → `to-issues`).
 - **Instance-specific config lives in the routine, not the skill.** Which monitoring project to poll, which
   severity escalates, dedup heuristics, the hourly cadence — none of that is hardcoded in a skill.
 
-The review archetype splits *what* we look for from *how* it's delivered. `review-architecture` (autonomous,
-analysis-only) and `improve-codebase-architecture` (interactive, grilling loop) are two deliveries over the **one**
-shared architecture lens (`ARCHITECTURE-LANGUAGE.md` + `ARCHITECTURE-DEEPENING.md`) — edit the lens once, both
-stay in sync.
+The review archetype splits *what* we look for from *how* it's delivered. Each domain has an **interactive**
+delivery (grilling loop, human-in-the-loop) and an **autonomous** delivery (one structured finding, hands-off),
+and the pair reads **one** shared lens so they never drift:
 
-When routine-wrapper skills *are* added to this plugin (they're still skills — Claude Code does not support a
-separate "routine" type, and two-level `skills/` nesting is **not** discovered at runtime), prefix them
-`routine-` (e.g. `routine-architecture-review`) so they group visually and read as orchestrators. Several
-proposed routines deliberately have **no** new skill: an *autonomous architecture review* routine just chains
-`review-architecture` into `to-issues`; an *hourly ticket implementer* chains `tdd`/`verify-and-ship`/`code-review`;
-*needs-info tagging* is already owned by `triage`.
+| Domain | Interactive | Autonomous | Shared lens |
+| --- | --- | --- | --- |
+| Architecture | `improve-codebase-architecture` | `review-architecture` | `ARCHITECTURE-LANGUAGE.md` + `ARCHITECTURE-DEEPENING.md` |
+| Security | `improve-codebase-security` | `review-security` | `SECURITY-LENS.md` |
+
+A routine wraps the **autonomous** member and adds filing. Routines reference skills by their installed
+invocation name (e.g. `/deep-core-skills:review-architecture`), never by file path, so they keep working after
+they're copied out of this repo — see [routines/README.md](./routines/README.md). The current routines:
+`routine-review-architecture` and `routine-review-security` (each → `to-issues`), and `routine-health-check`
+(report only — no ticket).
 
 ## Add a new skill
 

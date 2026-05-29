@@ -12,7 +12,7 @@ Sweep the connected monitoring and observability services and produce a single, 
 These keep the skill harmonious with the rest of the plugin — do not cross them:
 
 - **No Linear.** Do not create issues, apply labels, post comments, or read `LABELS.md`. Turning findings into tickets is a *routine* concern — chain this skill's report into `to-issues` or `triage` afterwards. Issue creation and the label vocabulary stay single-sourced in those skills.
-- **No codebase work.** Do not explore the repo, read source, or reason about code design. That is what `security-review` / `improve-codebase-architecture` are for.
+- **No codebase work.** Do not explore the repo, read source, or reason about code design. That is what `review-security` / `review-architecture` (and their interactive `improve-codebase-*` siblings) are for.
 - **No mutations anywhere.** Acknowledging an alert, resolving an incident, or restarting a service is out of scope. Surface it; let a human decide.
 - **No invented data.** Report only what the monitoring services actually return. If a service is unreachable or not connected, say so plainly rather than guessing.
 
