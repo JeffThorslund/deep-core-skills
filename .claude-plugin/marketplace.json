@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
-  "name": "deepcore-skills",
+  "name": "deep-core-skills",
   "description": "Jeff's personal Claude Code skills marketplace — usable locally and in remote routines, across any repo.",
   "owner": {
     "name": "Jeff Thorslund",
@@ -8,9 +8,9 @@
   },
   "plugins": [
     {
-      "name": "deepcore-skills",
-      "source": "./plugins/deepcore-skills",
-      "description": "Jeff's personal skills. Add new skills under plugins/deepcore-skills/skills/<name>/SKILL.md."
+      "name": "deep-core-skills",
+      "source": "./plugins/deep-core-skills",
+      "description": "Jeff's personal skills. Add new skills under plugins/deep-core-skills/skills/<name>/SKILL.md."
     }
   ]
 }

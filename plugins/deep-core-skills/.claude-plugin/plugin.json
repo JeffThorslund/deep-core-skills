@@ -1,11 +1,11 @@
 {
-  "name": "deepcore-skills",
+  "name": "deep-core-skills",
   "description": "Jeff's personal Claude Code skills, sharable across local and remote routines and any repo.",
   "author": {
     "name": "Jeff Thorslund",
     "email": "jeff@deepcoretech.com"
   },
-  "homepage": "https://github.com/JeffThorslund/claude-skills",
-  "repository": "https://github.com/JeffThorslund/claude-skills",
+  "homepage": "https://github.com/JeffThorslund/deep-core-skills",
+  "repository": "https://github.com/JeffThorslund/deep-core-skills",
   "license": "MIT"
 }
