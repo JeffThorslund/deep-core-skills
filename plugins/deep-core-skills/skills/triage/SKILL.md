@@ -19,7 +19,7 @@ Issues for this repo live in **Linear** (team: `Engineering`). Use the Linear MC
 
 - **Find issues to triage**: `mcp__linear__list_issues` (team `Engineering`), filtering by label/state.
 - **Read an issue**: `mcp__linear__get_issue` plus `mcp__linear__list_comments` for the full discussion and prior triage notes.
-- **Apply / change a state or category label**: `mcp__linear__save_issue` (or `update_issue`) with the desired `labels`.
+- **Apply / change a state or category label**: `mcp__linear__save_issue` with the issue's `id` and the desired `labels`.
 - **Comment**: `mcp__linear__save_comment` (remember the AI disclaimer above).
 - **"Close"**: Linear has no close-with-comment in one step — post the explanatory comment first, then move the issue to the `Canceled` workflow state via `mcp__linear__save_issue`. (`wontfix` is a *label*; cancelling is the state change that takes it off the active board.)
 

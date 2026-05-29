@@ -7,7 +7,7 @@ This skill takes the current conversation context and codebase understanding and
 
 ## Issue tracker: Linear
 
-The PRD is published as a **Linear** issue (team: `Engineering`) via the Linear MCP tools — use `mcp__linear__create_issue` with the PRD as the markdown `description`.
+The PRD is published as a **Linear** issue (team: `Engineering`) via the Linear MCP tools — use `mcp__linear__save_issue` (no `id`) with the PRD as the markdown `description`.
 
 The triage labels (canonical, shared with `to-issues` and `triage`) are defined in [LABELS.md](../LABELS.md) — **read it** and apply the label strings verbatim. Never invent or rename labels.
 
@@ -21,7 +21,7 @@ A deep module (as opposed to a shallow module) is one which encapsulates a lot o
 
 Check with the user that these modules match their expectations. Check with the user which modules they want tests written for.
 
-3. Write the PRD using the template below, then create it as a Linear issue (team `Engineering`) via `mcp__linear__create_issue`. Apply the `ready-for-agent` label - no need for additional triage.
+3. Write the PRD using the template below, then create it as a Linear issue (team `Engineering`) via `mcp__linear__save_issue` (no `id`). Apply the `ready-for-agent` label - no need for additional triage.
 
 <prd-template>
 

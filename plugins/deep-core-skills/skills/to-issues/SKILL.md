@@ -11,10 +11,10 @@ Break a plan into independently-grabbable issues using vertical slices (tracer b
 
 Issues for this repo live in **Linear** (team: `Engineering`). Use the Linear MCP tools for all operations — there is no `gh`/CLI step.
 
-- **Create an issue**: `mcp__linear__create_issue` (team `Engineering`; pass `title`, markdown `description`, and `labels`).
+- **Create an issue**: `mcp__linear__save_issue` with no `id` (team `Engineering`; pass `title`, markdown `description`, and `labels`).
 - **Read an issue**: `mcp__linear__get_issue` by id/identifier; `mcp__linear__list_comments` for its discussion.
 - **List/search issues**: `mcp__linear__list_issues` with `team`/`label`/`state` filters.
-- **Label or relabel**: `mcp__linear__save_issue` (or `update_issue`) with the desired `labels`.
+- **Label or relabel**: `mcp__linear__save_issue` with the issue's `id` and the desired `labels`.
 - **Link dependencies**: set the "Blocked by" relationship by referencing the blocker's Linear identifier in the body; if you create issues in dependency order you'll have real identifiers to cite.
 
 The triage labels (canonical, shared with `to-prd` and `triage`) are defined in [LABELS.md](../LABELS.md) — **read it** and apply the label strings verbatim. Never invent or rename labels.
@@ -61,7 +61,7 @@ Iterate until the user approves the breakdown.
 
 ### 5. Publish the issues to the issue tracker
 
-For each approved slice, create a new Linear issue (team `Engineering`) via `mcp__linear__create_issue`. Use the issue body template below as the `description`. These issues are considered ready for AFK agents, so apply the `ready-for-agent` label unless instructed otherwise.
+For each approved slice, create a new Linear issue (team `Engineering`) via `mcp__linear__save_issue` (no `id`). Use the issue body template below as the `description`. These issues are considered ready for AFK agents, so apply the `ready-for-agent` label unless instructed otherwise.
 
 Publish issues in dependency order (blockers first) so you can reference real issue identifiers in the "Blocked by" field.
 
