@@ -1,7 +1,6 @@
 ---
 name: to-issues
 description: Break a plan, spec, or PRD into independently-grabbable issues on the project issue tracker using tracer-bullet vertical slices. Use when user wants to convert a plan into issues, create implementation tickets, or break down work into issues.
-allowed-tools: Bash(cat *)
 ---
 
 # To Issues
@@ -18,17 +17,13 @@ Issues for this repo live in **Linear** (team: `Engineering`). Use the Linear MC
 - **Label or relabel**: `mcp__linear__save_issue` (or `update_issue`) with the desired `labels`.
 - **Link dependencies**: set the "Blocked by" relationship by referencing the blocker's Linear identifier in the body; if you create issues in dependency order you'll have real identifiers to cite.
 
-The triage labels (canonical, shared with `to-prd` and `triage`):
-
-!`cat ${CLAUDE_SKILL_DIR}/../LABELS.md`
+The triage labels (canonical, shared with `to-prd` and `triage`) are defined in [LABELS.md](../LABELS.md) — **read it** and apply the label strings verbatim. Never invent or rename labels.
 
 ## Process
 
 ### 1. Gather context
 
 Work from whatever is already in the conversation context. If the user passes an issue reference (issue number, URL, or path) as an argument, fetch it from the issue tracker and read its full body and comments.
-
-**Split-an-existing-parent mode (opt-in).** If the user's intent is explicitly to *split an existing parent ticket* into children (e.g. "split ENG-123 into right-sized tickets"), treat that referenced issue as the **parent**: the children you create should be related back to it (see step 5). This is the only mode in which you touch the parent's relationships. The default — synthesizing a fresh set of slices from a plan/PRD and leaving every existing issue untouched — still applies whenever this explicit split intent is absent.
 
 ### 2. Explore the codebase (optional)
 
@@ -69,8 +64,6 @@ Iterate until the user approves the breakdown.
 For each approved slice, create a new Linear issue (team `Engineering`) via `mcp__linear__create_issue`. Use the issue body template below as the `description`. These issues are considered ready for AFK agents, so apply the `ready-for-agent` label unless instructed otherwise.
 
 Publish issues in dependency order (blockers first) so you can reference real issue identifiers in the "Blocked by" field.
-
-**In split-an-existing-parent mode** (from step 1): also relate each child back to the parent — set the parent relationship via `mcp__linear__save_issue` (or cite the parent's identifier in the child's "Parent" section of the body template) so the split is navigable from the parent. The HITL/AFK classification maps to the canonical state labels exactly as above (AFK → `ready-for-agent`, HITL → `ready-for-human`); do not introduce any parallel vocabulary. You may post one comment on the parent noting that it was split and listing the child identifiers — but do **not** close, cancel, or relabel the parent. (Use the same AI-disclaimer convention as `triage` if you comment.)
 
 <issue-template>
 ## Parent

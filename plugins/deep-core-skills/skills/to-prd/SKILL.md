@@ -1,7 +1,6 @@
 ---
 name: to-prd
 description: Turn the current conversation context into a PRD and publish it to the project issue tracker. Use when user wants to create a PRD from the current context.
-allowed-tools: Bash(cat *)
 ---
 
 This skill takes the current conversation context and codebase understanding and produces a PRD. Do NOT interview the user — just synthesize what you already know.
@@ -10,9 +9,7 @@ This skill takes the current conversation context and codebase understanding and
 
 The PRD is published as a **Linear** issue (team: `Engineering`) via the Linear MCP tools — use `mcp__linear__create_issue` with the PRD as the markdown `description`.
 
-The triage labels (canonical, shared with `to-issues` and `triage`):
-
-!`cat ${CLAUDE_SKILL_DIR}/../LABELS.md`
+The triage labels (canonical, shared with `to-issues` and `triage`) are defined in [LABELS.md](../LABELS.md) — **read it** and apply the label strings verbatim. Never invent or rename labels.
 
 ## Process
 

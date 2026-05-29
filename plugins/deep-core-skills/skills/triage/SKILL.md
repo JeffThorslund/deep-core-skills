@@ -1,7 +1,6 @@
 ---
 name: triage
 description: Triage issues through a state machine driven by triage roles. Use when user wants to create an issue, triage issues, review incoming bugs or feature requests, prepare issues for an AFK agent, or manage issue workflow.
-allowed-tools: Bash(cat *)
 ---
 
 # Triage
@@ -33,9 +32,7 @@ The five state labels and two category labels below **already exist verbatim** i
 
 ## Roles
 
-The category and state roles below are the canonical triage labels (single source of truth, shared with `to-issues` and `to-prd`):
-
-!`cat ${CLAUDE_SKILL_DIR}/../LABELS.md`
+The category and state roles are the canonical triage labels (single source of truth, shared with `to-issues` and `to-prd`), defined in [LABELS.md](../LABELS.md) — **read it** and apply the label strings verbatim. Never invent or rename labels.
 
 Every triaged issue should carry exactly one category role and one state role. If state roles conflict, flag it and ask the maintainer before doing anything else.
 
