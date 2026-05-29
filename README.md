@@ -38,6 +38,22 @@ claude plugin install deep-core-skills@deep-core-skills
 Because it's installed at the user/plugin level (not committed into a project's `.claude/`),
 the skills work in **every repo** you open and in any remote routine that runs the same install.
 
+## Skills
+
+Skills currently in the plugin. (Adapted from [mattpocock/skills](https://github.com/mattpocock/skills).)
+
+- **[grill-with-docs](./plugins/deep-core-skills/skills/grill-with-docs/SKILL.md)** — Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates `CONTEXT.md` and ADRs inline.
+- **[improve-codebase-architecture](./plugins/deep-core-skills/skills/improve-codebase-architecture/SKILL.md)** — Find deepening opportunities in a codebase, informed by the domain language in `CONTEXT.md` and the decisions in `docs/adr/`.
+- **[tdd](./plugins/deep-core-skills/skills/tdd/SKILL.md)** — Test-driven development with a red-green-refactor loop. Builds features or fixes bugs one vertical slice at a time.
+- **[to-issues](./plugins/deep-core-skills/skills/to-issues/SKILL.md)** — Break any plan, spec, or PRD into independently-grabbable issues using vertical slices.
+- **[to-prd](./plugins/deep-core-skills/skills/to-prd/SKILL.md)** — Turn the current conversation context into a PRD and submit it to the issue tracker.
+- **[triage](./plugins/deep-core-skills/skills/triage/SKILL.md)** — Triage issues through a state machine of triage roles.
+- **[zoom-out](./plugins/deep-core-skills/skills/zoom-out/SKILL.md)** — Tell the agent to zoom out and give broader context or a higher-level perspective on an unfamiliar section of code.
+
+### Conventions
+
+The three issue-tracker skills — `to-issues`, `to-prd`, and `triage` — assume **[Linear](https://linear.app)** (team `Engineering`) as the tracker, driven through the Linear MCP server rather than a CLI. They share one canonical label vocabulary defined in [`plugins/deep-core-skills/skills/LABELS.md`](./plugins/deep-core-skills/skills/LABELS.md) — each skill inlines that file at runtime, so the labels and their meanings are written once. The doc-oriented skills (`grill-with-docs`, `improve-codebase-architecture`, `tdd`) read a root `CONTEXT.md` and `docs/adr/` when present and create them lazily otherwise.
+
 ## Add a new skill
 
 1. Create `plugins/deep-core-skills/skills/<skill-name>/SKILL.md` with YAML frontmatter:
