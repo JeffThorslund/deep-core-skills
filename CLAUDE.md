@@ -31,6 +31,7 @@ Most skills are adapted from [mattpocock/skills](https://github.com/mattpocock/s
 - `health-check` is original (no upstream counterpart).
 - `review-security` was the original `security-review` skill, renamed for parallelism with `review-architecture`; its lenses were lifted to the shared `SECURITY-LENS.md`. `improve-codebase-security` is **original** — the interactive sibling, mirroring `improve-codebase-architecture`'s flow. Both are original (no upstream counterpart).
 - `to-issues`, `to-prd`, `triage` diverge only by the Linear/LABELS adaptations above — no other behavioural drift.
+- `teach` is from Matt's `productivity` set (not `engineering`), copied near-verbatim with its four format docs. One deliberate addition: `SKILL.md` links `GLOSSARY-FORMAT.md` in its glossary paragraph (upstream ships the file but never links it).
 
 ## Editing
 
