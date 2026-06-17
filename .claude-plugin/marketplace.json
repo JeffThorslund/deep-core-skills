@@ -8,9 +8,14 @@
   },
   "plugins": [
     {
-      "name": "deep-core-skills",
-      "source": "./plugins/deep-core-skills",
-      "description": "Jeff's personal skills. Add new skills under plugins/deep-core-skills/skills/<name>/SKILL.md."
+      "name": "deep-core-dev",
+      "source": "./plugins/deep-core-dev",
+      "description": "Development skills — TDD, code review, architecture/security passes, issue triage, planning. Add new skills under plugins/deep-core-dev/skills/<name>/SKILL.md."
+    },
+    {
+      "name": "deep-core-ops",
+      "source": "./plugins/deep-core-ops",
+      "description": "Operations / GTM skills — conversation intake and the customer-insights pipeline. Independently installable. Add new skills under plugins/deep-core-ops/skills/<name>/SKILL.md."
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
-  "name": "deep-core-skills",
-  "description": "Jeff's personal Claude Code skills, sharable across local and remote routines and any repo.",
+  "name": "deep-core-ops",
+  "description": "Deep Core operations skills — customer/conversation intake and the insights pipeline. Independently installable for the ops/GTM workflow.",
   "author": {
     "name": "Jeff Thorslund",
     "email": "jeff@deepcoretech.com"
